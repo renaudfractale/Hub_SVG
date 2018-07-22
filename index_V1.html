@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Galaxy Renaud HENRY</title>
+  <script type="text/javascript" src="js/svg.js"></script>
+<script type="text/javascript" src="js/cookie.js"></script>
+</head>
+<body style='width:100%; height:100%; border:0; margin:0; padding:0; background: linear-gradient(Grey 0%, White 100%);'>
+  <div id="drawing"></div>
+   <script>
+    // initialize SVG.js
+	 
+       
+       class RH_GetParameter {
+           
+           constructor()
+           {
+                var w = window;
+                var d = document;
+                var e = d.documentElement;
+                var g = d.getElementsByTagName('body')[0]; 
+               
+                this.x =  e.clientWidth ; //g.clientWidth ;//|| w.innerWidth || e.clientWidth;
+                this.y =  e.clientHeight ; //g.clientHeight ;//w.innerHeight || e.clientHeight ;
+                //alert( "x = "  + g.clientWidth + " x " +  w.innerWidth + " x " +  e.clientWidth);
+               //alert( "y = "  + g.clientHeight + " x " +  w.innerHeight + " x " +  e.clientHeight);
+               //alert( "y = "  + g.clientHeight + " x " +  w.innerHeight + " x " +  e.clientHeight);
+               
+               
+                this.xCenter = this.x/2;
+                this.yCenter = this.y/2;
+               
+               //alert(this.xCenter + " vs " + this.yCenter)
+           }
+       }
+       
+       
+       
+       
+       var draw = SVG('drawing');
+       var RH_Parameters = new RH_GetParameter();
+    class RH_Interface {
+           constructor(ListImg,Listlink,Rmain,Rmax,stateM) {
+                this.ListImg=ListImg;
+                this.Listlink=Listlink;
+                this.Rmain=Rmain;
+                this.Rmax=Rmax;
+                this.stateM=stateM;
+           }
+        
+        groups_compute() {
+            
+        }
+    }
+       
+    class RH_groups {
+           constructor(ListImg,Listlink,NbGroups,NoGroups,Rmain,Rmax,stateM,stateL,color)
+        {
+            this.ListImg=ListImg;
+            this.Listlink=Listlink;
+            this.NbGroups=NbGroups;
+            this.NoGroups=NoGroups;
+            this.Rmain=Rmain;
+            this.Rmax=Rmax;
+            this.stateM=stateM;
+            this.stateL=stateL;
+            this.color=color;
+            this.Rmin = Rmax/4;
+            this.Rext = this.Rmin*1.5;
+            this.Rint= this.Rmax-(this.Rext);
+        }
+        
+         get groups() {
+            return this.group;
+         }
+        
+        groups_compute() {
+            var PasMain=(2*Math.PI)/this.NbGroups;
+            var PasInt=(2*Math.PI)/this.ListImg.length;
+            
+            var group = draw.group()
+            
+            var CenterX = RH_Parameters.xCenter + Math.sin(PasMain*this.NoGroups)*this.Rmain;
+            var CenterY = RH_Parameters.yCenter + Math.cos(PasMain*this.NoGroups)*this.Rmain;
+            
+            //Parameter 
+            var Rmax = this.Rmax;
+            var Rmin = this.Rmin;
+            
+            var color = this.color;
+            
+            var Rext = this.Rext;
+            var Rint = this.Rint;
+            
+            var ListImg = this.ListImg;
+            var Listlink = this.Listlink;
+            //alert(Listlink + " == " +this.Listlink )
+            //Cchildren
+                var Ar=[];
+                for (var i = 0; i < this.ListImg.length; i++) {
+                    Ar.push( draw.circle(Rext*2).fill(color).center(RH_Parameters.xCenter,RH_Parameters.yCenter) )
+                }
+
+            //C main
+                var R=this.Rmax;
+                if (this.stateL==true) { R=this.Rmin}
+
+                var CMain = draw.circle(R*2).fill(color).center(RH_Parameters.xCenter,RH_Parameters.yCenter);
+
+                CMain.click(function() { if(this.width()==Rmax*2){this.animate().size(Rmin*2)} else {this.animate().size(Rmax*2)} })
+            
+            //Image
+                var Im=[];
+                for (var i = 0; i < this.ListImg.length; i++) {
+
+                     var link = draw.link("https://"+Listlink[i]+".renaud-henry.me");
+                    link.show(Listlink[i]);
+                    link.target('_blank');
+                    Im.push(link.image(ListImg[i]).size(Rext*Math.sqrt(2),Rext*Math.sqrt(2)).center(RH_Parameters.xCenter+Math.sin(PasInt*i)*Rint,RH_Parameters.yCenter+Math.cos(PasInt*i)*Rint))
+                    
+                   
+                }
+
+            if(this.stateM==true)
+            {
+                CMain.center(CenterX,CenterY);
+                    
+                for (var i = 0; i < this.ListImg.length; i++) {
+                    Ar[i].center(CenterX+Math.sin(PasInt*i)*Rint,CenterY+Math.cos(PasInt*i)*Rint);
+                    Im[i].center(CenterX+Math.sin(PasInt*i)*Rint,CenterY+Math.cos(PasInt*i)*Rint);
+                }
+            }
+            else
+            {
+                 CMain.animate().center(CenterX,CenterY);
+                for (var i = 0; i < this.ListImg.length; i++) {
+                    Ar[i].animate().center(CenterX+Math.sin(PasInt*i)*Rint,CenterY+Math.cos(PasInt*i)*Rint);
+                    Im[i].animate().center(CenterX+Math.sin(PasInt*i)*Rint,CenterY+Math.cos(PasInt*i)*Rint);
+                }
+            }
+            
+            group.add(CMain);
+                for (var i = 0; i < this.ListImg.length; i++) {
+                    group.add(Ar[i]);
+                    group.add(Im[i]);
+                }
+            return group;
+        }
+       }
+    
+	function toto () {
+        RH_Parameters = new RH_GetParameter();
+        var TabC=Cookies.get('TabC');
+        if(TabC==undefined)
+            {
+                TabC=[false,false,false,false];
+                Cookies('TabC', TabC, { expires: 7 });
+            }
+	    draw.clear();
+        draw.size(RH_Parameters.x,RH_Parameters.y);
+        var xCenter = RH_Parameters.xCenter;
+        var yCenter = RH_Parameters.yCenter;
+        var Rmax=200/2;
+        var Rmain = Math.min(xCenter-Rmax-20, yCenter-Rmax-20)
+        var ar1 = ['images/resume.svg','images/linkedin.svg','images/viadeo.svg'];
+        var ar10 = ['cvpro','linkedin','viadeo'];
+        
+        var C1 = new RH_groups(ar1,ar10,3,0,Rmain,Rmax,TabC[0],TabC[1],'#F80');
+        var G1 = C1.groups_compute();
+        
+        var ar2 = ['images/visite-virtuelle-interactive.svg','images/visite-virtuelle-photographie.svg','images/pano.svg','images/fractale-logo.png'];
+        var ar20 = ['visite','photo','pano','fractale'];
+        
+        var C2 = new RH_groups(ar2,ar20,3,1,Rmain,Rmax,TabC[0],TabC[2],'#F08');
+        var G2 = C2.groups_compute();
+        
+        var ar3 = ['images/fractale-logo.png','images/mandelbrot-logo.png','images/py-logo_low.png','images/knock-logo_low.png','images/Q_low.png'];
+         var ar30 = ['julia','mandelbrot','pythagore','koch','quaternion'];
+        var C3 = new RH_groups(ar3,ar30,3,2,Rmain,Rmax,TabC[0],TabC[3],'#0F8');
+        var G3 = C3.groups_compute();  
+        
+        
+       draw.rect(Rmax*2, Rmax*2).center(RH_Parameters.xCenter,RH_Parameters.yCenter).fill('#000').radius(25);
+       
+       draw.image('images/man.png').size(Rmax,Rmax).center(RH_Parameters.xCenter,RH_Parameters.yCenter-Rmax/2);
+       draw.text("Renaud HENRY").fill('#fff').center(RH_Parameters.xCenter,RH_Parameters.yCenter+30);
+       draw.text("Developpeur").fill('#fff').center(RH_Parameters.xCenter,RH_Parameters.yCenter+50);
+       draw.text("33 ans").fill('#fff').center(RH_Parameters.xCenter,RH_Parameters.yCenter+70);
+       }
+     
+		window.onload = toto;
+		window.onresize = toto;
+		
+	
+        
+       
+  </script>
+</body>
+</html>

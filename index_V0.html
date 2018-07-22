@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Galaxy Renaud HENRY</title>
+  <script type="text/javascript" src="js/svg.js"></script>
+</head>
+<body style='width:100%; height:100%; border:0; margin:0; padding:0; background: linear-gradient(Grey 0%, White 100%);'>
+  <div id="drawing"></div>
+   <script>
+    // initialize SVG.js
+       var draw = SVG('drawing');
+       var w = window,
+            d = document,
+            e = d.documentElement,
+            g = d.getElementsByTagName('body')[0],
+            x =  g.clientWidth || w.innerWidth || e.clientWidth ,
+            y =  w.innerHeight || e.clientHeight || g.clientHeight; //|||| 
+       
+       //var nested = draw.nested()
+       //var rect = nested.rect(x, y)
+       // draw pink square
+       draw.size(x,y);
+       var xCenter = x/2;
+       var yCenter = y/2;
+       
+       var XY_main=200;
+       var XY_smal=50;
+       var XY_child=75;
+       //alert((xCenter-XY_main/2-20) + ' x ' + (yCenter-XY_main/2-20));
+       var RCircle = Math.min(xCenter-XY_main/2-20, yCenter-XY_main/2-20);
+       var RCircle_XY = XY_main/2; 
+       var RCircle_smal = XY_smal/2; 
+       var RCircle_child = XY_child/2;
+       var RCircle_int = RCircle_XY-RCircle_child;
+       //alert(RCircle);
+       
+       // Interface
+       var Pas=(2*Math.PI)/3;
+            var IGithub= draw.image('images/octocat.png').size(150,150).center(xCenter, yCenter);
+            IGithub.animate().center(xCenter-Math.sin(Pas*0)*RCircle, yCenter-Math.cos(Pas*0)*RCircle);
+            IGithub.click(function() {  window.open( "https://github.renaud-henry.me", '_blank')});
+        
+            var IWiki= draw.image('images/wikipedia-logo.png').size(150,150).center(xCenter, yCenter);
+            IWiki.animate().center(xCenter-Math.sin(Pas*1)*RCircle, yCenter-Math.cos(Pas*1)*RCircle);
+            IWiki.click(function() {  window.open( "https://wiki.renaud-henry.me", '_blank')});
+        
+            var IWiki= draw.image('images/productivite-logo.png').size(150,150).center(xCenter, yCenter);
+            IWiki.animate().center(xCenter-Math.sin(Pas*2)*RCircle, yCenter-Math.cos(Pas*2)*RCircle);
+            IWiki.click(function() {  window.open( "https://wiki.renaud-henry.me", '_blank')});
+       
+        // fleche
+       var Pas=(2*Math.PI)/3;
+       var Offcet = 30/180*Math.PI;
+       var Offcet2 = 60/180*Math.PI;
+            var IArraw1= draw.image('images/arrow_1.svg').size(100,100).center(xCenter, yCenter);
+           IArraw1.animate().center(xCenter-Math.sin(Offcet*1)*RCircle*0.70, yCenter-Math.cos(Offcet*1)*RCircle*0.70);
+       
+            var IArraw2= draw.image('images/arrow_2.svg').size(100,100).center(xCenter, yCenter);
+           IArraw2.animate().center(xCenter-Math.sin(Offcet*-1)*RCircle*0.70, yCenter-Math.cos(Offcet*-1)*RCircle*0.70);
+       
+            var IArraw3= draw.image('images/arrow_1.svg').size(100,100).center(xCenter, yCenter);
+           IArraw3.animate().center(xCenter-Math.sin(Offcet*1)*RCircle*0.70, yCenter-Math.cos(Offcet*1)*RCircle*0.70).rotate(120,xCenter, yCenter);
+       
+            var IArraw4= draw.image('images/arrow_2.svg').size(100,100).center(xCenter, yCenter);
+           IArraw4.animate().center(xCenter-Math.sin(Offcet*-1)*RCircle*0.70, yCenter-Math.cos(Offcet*-1)*RCircle*0.70).rotate(120,xCenter, yCenter);
+       
+            var IArraw5= draw.image('images/arrow_1.svg').size(100,100).center(xCenter, yCenter);
+           IArraw5.animate().center(xCenter-Math.sin(Offcet*1)*RCircle*0.70, yCenter-Math.cos(Offcet*1)*RCircle*0.70).rotate(240,xCenter, yCenter);
+       
+            var IArraw6= draw.image('images/arrow_2.svg').size(100,100).center(xCenter, yCenter);
+           IArraw6.animate().center(xCenter-Math.sin(Offcet*-1)*RCircle*0.70, yCenter-Math.cos(Offcet*-1)*RCircle*0.70).rotate(240,xCenter, yCenter);
+       
+        // C auxilièrer
+           var CLinkedin = draw.circle(XY_child).fill('#F80').center(xCenter,yCenter);
+           CLinkedin.animate().center(xCenter+Math.cos(30/180*Math.PI)*RCircle+Math.cos(30/180*Math.PI)*RCircle_int, yCenter-RCircle/2-(RCircle_int)/2);
+
+           var CLviadeo = draw.circle(XY_child).fill('#F80').center(xCenter,yCenter);
+           CLviadeo.animate().center(xCenter+Math.cos(30/180*Math.PI)*RCircle-Math.cos(30/180*Math.PI)*RCircle_int, yCenter-RCircle/2-(RCircle_int)/2);
+
+           var CCvPro = draw.circle(XY_child).fill('#F80').center(xCenter,yCenter);
+           CCvPro.animate().center(xCenter+Math.cos(30/180*Math.PI)*RCircle, yCenter-RCircle/2+RCircle_int);
+       
+       
+        // C principale
+
+       
+          var CPro =  draw.circle(XY_main).fill('#F80').center(xCenter,yCenter);
+           CPro.animate().center(xCenter+Math.cos(30/180*Math.PI)*RCircle, yCenter-RCircle/2);
+       
+       // Image
+           var ICvPro= draw.image('images/resume.svg').size(50,50).center(xCenter,yCenter+RCircle_int);
+           ICvPro.animate().center(xCenter+Math.cos(30/180*Math.PI)*RCircle, yCenter-RCircle/2+RCircle_int);
+           ICvPro.click(function() {  window.open( "https://cvpro.renaud-henry.me", '_blank')});
+       
+           var ILinkedin= draw.image('images/linkedin.svg').size(50,50).center(xCenter+Math.cos(30/180*Math.PI)*RCircle_int,yCenter-RCircle_int/2);
+           ILinkedin.animate().center(xCenter+Math.cos(30/180*Math.PI)*RCircle+Math.cos(30/180*Math.PI)*RCircle_int, yCenter-RCircle/2-(RCircle_int)/2);
+           ILinkedin.click(function() {  window.open( "https://linkedin.renaud-henry.me", '_blank')});
+       
+       
+           var IViadeo= draw.image('images/viadeo.svg').size(50,50).center(xCenter-Math.cos(30/180*Math.PI)*RCircle_int,yCenter-RCircle_int/2);
+           IViadeo.animate().center(xCenter+Math.cos(30/180*Math.PI)*RCircle-Math.cos(30/180*Math.PI)*RCircle_int, yCenter-RCircle/2-(RCircle_int)/2);
+           IViadeo.click(function() {  window.open( "https://viadeo.renaud-henry.me", '_blank')});
+       //Click
+            CPro.click(function() { if(this.width()==XY_main){this.animate().size(XY_smal)} else {this.animate().size(XY_main)} });
+       
+       
+
+       // C auxilièrer
+            var Cvv = draw.circle(XY_child).fill('#0f8').center(xCenter,yCenter);
+            Cvv.animate().center(xCenter, yCenter+RCircle+RCircle_int);
+
+            var Cvv2 = draw.circle(XY_child).fill('#0f8').center(xCenter,yCenter);
+            Cvv2.animate().center(xCenter+RCircle_int, yCenter+RCircle);
+       
+            var Cvv3 = draw.circle(XY_child).fill('#0f8').center(xCenter,yCenter);
+            Cvv3.animate().center(xCenter-RCircle_int, yCenter+RCircle);
+       
+            var Cvv4 = draw.circle(XY_child).fill('#0f8').center(xCenter,yCenter);
+            Cvv4.animate().center(xCenter, yCenter+RCircle-RCircle_int);
+       
+       // C principale
+           var CHobbies = draw.circle(XY_main).fill('#0f8').center(xCenter,yCenter);
+           CHobbies.animate().center(xCenter, yCenter+RCircle);
+       
+       //Image
+            var IVV= draw.image('images/visite-virtuelle-interactive.svg').size(50,50).center(xCenter,yCenter+RCircle_int);
+            IVV.animate().center(xCenter, yCenter+RCircle+RCircle_int);
+            IVV.click(function() {  window.open( "https://visite.renaud-henry.me", '_blank')});
+       
+            var Iphoto= draw.image('images/visite-virtuelle-photographie.svg').size(50,50).center(xCenter+RCircle_int,yCenter);
+            Iphoto.animate().center(xCenter+RCircle_int, yCenter+RCircle);
+            Iphoto.click(function() {  window.open( "https://photo.renaud-henry.me", '_blank')});
+       
+            var Ipano= draw.image('images/pano.svg').size(50,50).center(xCenter-RCircle_int,yCenter);
+            Ipano.animate().center(xCenter-RCircle_int, yCenter+RCircle);
+            Ipano.click(function() {  window.open( "https://pano.renaud-henry.me", '_blank')});
+       
+       
+            var Ifractals= draw.image('images/fractale-logo.png').size(50,50).center(xCenter,yCenter-RCircle_int);
+            Ifractals.animate().center(xCenter, yCenter+RCircle-RCircle_int);
+            Ifractals.click(function() {  window.open( "https://fractale.renaud-henry.me", '_blank')});
+       
+       
+       //Click
+            CHobbies.click(function() { if(this.width()==XY_main){this.animate().size(XY_smal)} else {this.animate().size(XY_main)} });
+       
+       
+       // C auxilièrer
+       var Pas= (2*Math.PI)/5;
+       
+            var CH0 = draw.circle(XY_child).fill('#80F').center(xCenter,yCenter);
+            CH0.animate().center(xCenter-Math.cos(30/180*Math.PI)*RCircle+Math.sin(Pas*0)*RCircle_int, yCenter-RCircle/2+Math.cos(Pas*0)*RCircle_int);
+       
+            var CH1 = draw.circle(XY_child).fill('#80F').center(xCenter,yCenter);
+            CH1.animate().center(xCenter-Math.cos(30/180*Math.PI)*RCircle+Math.sin(Pas*1)*RCircle_int, yCenter-RCircle/2+Math.cos(Pas*1)*RCircle_int);
+       
+            var CH2 = draw.circle(XY_child).fill('#80F').center(xCenter,yCenter);
+            CH2.animate().center(xCenter-Math.cos(30/180*Math.PI)*RCircle+Math.sin(Pas*2)*RCircle_int, yCenter-RCircle/2+Math.cos(Pas*2)*RCircle_int);4
+       
+       
+            var CH3 = draw.circle(XY_child).fill('#80F').center(xCenter,yCenter);
+            CH3.animate().center(xCenter-Math.cos(30/180*Math.PI)*RCircle+Math.sin(Pas*3)*RCircle_int, yCenter-RCircle/2+Math.cos(Pas*3)*RCircle_int);
+       
+       
+            var CH4 = draw.circle(XY_child).fill('#80F').center(xCenter,yCenter);
+            CH4.animate().center(xCenter-Math.cos(30/180*Math.PI)*RCircle+Math.sin(Pas*4)*RCircle_int, yCenter-RCircle/2+Math.cos(Pas*4)*RCircle_int);
+       
+       
+        // C principale
+           var CShoft =   draw.circle(XY_main).fill('#80F').center(xCenter,yCenter);
+           CShoft.animate().center(xCenter-Math.cos(30/180*Math.PI)*RCircle, yCenter-RCircle/2);
+       
+       //Image
+       
+            var IFJ= draw.image('images/fractale-logo.png').size(50,50).center(xCenter+Math.sin(Pas*0)*RCircle_int, yCenter+Math.cos(Pas*0)*RCircle_int);
+            IFJ.animate().center(xCenter-Math.cos(30/180*Math.PI)*RCircle+Math.sin(Pas*0)*RCircle_int, yCenter-RCircle/2+Math.cos(Pas*0)*RCircle_int);
+            IFJ.click(function() {  window.open( "https://julia.renaud-henry.me", '_blank')});
+        
+            var IFM= draw.image('images/mandelbrot-logo.png').size(50,50).center(xCenter+Math.sin(Pas*1)*RCircle_int, yCenter+Math.cos(Pas*1)*RCircle_int);
+            IFM.animate().center(xCenter-Math.cos(30/180*Math.PI)*RCircle+Math.sin(Pas*1)*RCircle_int, yCenter-RCircle/2+Math.cos(Pas*1)*RCircle_int);
+            IFM.click(function() {  window.open( "https://mandelbrot.renaud-henry.me", '_blank')});
+ 
+       
+            var IFP= draw.image('images/py-logo_low.png').size(50,50).center(xCenter+Math.sin(Pas*2)*RCircle_int, yCenter+Math.cos(Pas*2)*RCircle_int);
+            IFP.animate().center(xCenter-Math.cos(30/180*Math.PI)*RCircle+Math.sin(Pas*2)*RCircle_int, yCenter-RCircle/2+Math.cos(Pas*2)*RCircle_int);
+            IFP.click(function() {  window.open( "https://pythagore.renaud-henry.me", '_blank')});
+       
+            var IFK= draw.image('images/knock-logo_low.png').size(50,50).center(xCenter+Math.sin(Pas*3)*RCircle_int, yCenter+Math.cos(Pas*3)*RCircle_int);
+            IFK.animate().center(xCenter-Math.cos(30/180*Math.PI)*RCircle+Math.sin(Pas*3)*RCircle_int, yCenter-RCircle/2+Math.cos(Pas*3)*RCircle_int);
+            IFK.click(function() {  window.open( "https://koch.renaud-henry.me", '_blank')});
+       
+            var IFQ= draw.image('images/Q_low.png').size(50,50).center(xCenter+Math.sin(Pas*4)*RCircle_int, yCenter+Math.cos(Pas*4)*RCircle_int);
+            IFQ.animate().center(xCenter-Math.cos(30/180*Math.PI)*RCircle+Math.sin(Pas*4)*RCircle_int, yCenter-RCircle/2+Math.cos(Pas*4)*RCircle_int);
+            IFQ.click(function() {  window.open( "https://quaternion.renaud-henry.me", '_blank')});
+       
+       //Click
+            CShoft.click(function() { if(this.width()==XY_main){this.animate().size(XY_smal)} else {this.animate().size(XY_main)} });
+       
+       
+
+       
+       draw.text("Renaud HENRY").fill('#000').center(xCenter,yCenter+30);
+       
+       draw.rect(XY_main, XY_main).move(xCenter-XY_main/2,yCenter-XY_main/2).fill('#000').radius(25);
+       
+       draw.image('images/man.png').move(xCenter-111/2,yCenter-XY_main/2+10);
+       draw.text("Renaud HENRY").fill('#fff').center(xCenter,yCenter+30);
+       draw.text("Developpeur").fill('#fff').center(xCenter,yCenter+50);
+       draw.text("33 ans").fill('#fff').center(xCenter,yCenter+70);
+       
+     
+       
+  </script>
+</body>
+</html>
