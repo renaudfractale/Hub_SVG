@@ -37,118 +37,171 @@
        
        
        
-       var draw = SVG('drawing');
-       var RH_Parameters = new RH_GetParameter();
-    class RH_Interface {
-           constructor(ListImg,Listlink,Rmain,Rmax,stateM) {
+        var draw = SVG('drawing');
+        var RH_Parameters = new RH_GetParameter();
+        class RH_Interface {
+            constructor(ListImg,Listlink,Rmain,Rmax,stateM) {
                 this.ListImg=ListImg;
                 this.Listlink=Listlink;
                 this.Rmain=Rmain;
                 this.Rmax=Rmax;
                 this.stateM=stateM;
-           }
-        
-        groups_compute() {
+            }
+            compute(){
+                var PasMain=(2*Math.PI)/this.ListImg.length;
+                
+                
+                
+                
+                
+            }
+        }
+        class Point{
+            constructor(x,y){
+                this.x=x;
+                this.y=y;
+            }
+            Rotate(theta,cx,cy){
+                var X=this.x-cx;
+                var Y=this.y-cy;
+                
+                var R=Math.sqrt((X*X)+(Y*Y));
+                
+                var Angle = Math.atan2(Y,X);
+                
+                this.x=R*Math.cos(Angle+theta)+cx;
+                this.y=R*Math.sin(Angle+theta)+cy;
+                                
+            }
             
         }
-    }
+        
+        function tracePath(NbGroups,NoGroups,Rmain,Rmax,color){
+            //
+            var R1=(Rmax*3);
+            var D2= (Rmain*2);
+            var D1=R1*2;
+            //
+
+            var P1=new Point(R1+RH_Parameters.xCenter-R1,D2+RH_Parameters.yCenter-D2/2)
+            //alert(P1.x+" vs "+P1.y)
+            var P2=new Point(D1+RH_Parameters.xCenter-R1,D2+RH_Parameters.yCenter-D2/2)
+
+            var P3=new Point(D1+RH_Parameters.xCenter-R1,0+RH_Parameters.yCenter-D2/2)
+
+            var P4=new Point(R1+RH_Parameters.xCenter-R1,0+RH_Parameters.yCenter-D2/2);
+            
+            var P5=new Point(0+RH_Parameters.xCenter-R1,0+RH_Parameters.yCenter-D2/2);
+            
+            var P6=new Point(0+RH_Parameters.xCenter-R1,D2+RH_Parameters.yCenter-D2/2);
+            
+            var PasAngle = -(2*Math.PI)/NbGroups*NoGroups;
+            
+            P1.Rotate(PasAngle,RH_Parameters.xCenter,RH_Parameters.yCenter)
+            P2.Rotate(PasAngle,RH_Parameters.xCenter,RH_Parameters.yCenter)
+            P3.Rotate(PasAngle,RH_Parameters.xCenter,RH_Parameters.yCenter)
+            P4.Rotate(PasAngle,RH_Parameters.xCenter,RH_Parameters.yCenter)
+            P5.Rotate(PasAngle,RH_Parameters.xCenter,RH_Parameters.yCenter)
+            P6.Rotate(PasAngle,RH_Parameters.xCenter,RH_Parameters.yCenter)
+            
+            var Paths1 = draw.path("M"+P1.x+" "+P1.y+" C "+P2.x+" "+P2.y+", "+P3.x+" "+P3.y+", "+P4.x+" "+P4.y+""+ " M"+P4.x+" "+P4.y+" C "+P5.x+" "+P5.y+", "+P6.x+" "+P6.y+", "+P1.x+" "+P1.y).fill('none').stroke({ color: '#000', width: 4, linecap: 'round', linejoin: 'round' })
+
+
+            return Paths1;        
+        }
        
-    class RH_groups {
-           constructor(ListImg,Listlink,NbGroups,NoGroups,Rmain,Rmax,stateM,stateL,color)
-        {
-            this.ListImg=ListImg;
-            this.Listlink=Listlink;
-            this.NbGroups=NbGroups;
-            this.NoGroups=NoGroups;
-            this.Rmain=Rmain;
-            this.Rmax=Rmax;
-            this.stateM=stateM;
-            this.stateL=stateL;
-            this.color=color;
-            this.Rmin = Rmax/4;
-            this.Rext = this.Rmin*1.5;
-            this.Rint= this.Rmax-(this.Rext);
-        }
-        
-         get groups() {
-            return this.group;
-         }
-        
-        groups_compute() {
-            var PasMain=(2*Math.PI)/this.NbGroups;
-            var PasInt=(2*Math.PI)/this.ListImg.length;
-            
-            var group = draw.group()
-            
-            var CenterX = RH_Parameters.xCenter + Math.sin(PasMain*this.NoGroups)*this.Rmain;
-            var CenterY = RH_Parameters.yCenter + Math.cos(PasMain*this.NoGroups)*this.Rmain;
-            
-            //Parameter 
-            var Rmax = this.Rmax;
-            var Rmin = this.Rmin;
-            
-            var color = this.color;
-            
-            var Rext = this.Rext;
-            var Rint = this.Rint;
-            
-            var ListImg = this.ListImg;
-            var Listlink = this.Listlink;
-            //alert(Listlink + " == " +this.Listlink )
-            //Cchildren
-                var Ar=[];
-                for (var i = 0; i < this.ListImg.length; i++) {
-                    Ar.push( draw.circle(Rext*2).fill(color).center(RH_Parameters.xCenter,RH_Parameters.yCenter) )
-                }
-
-            //C main
-                var R=this.Rmax;
-                if (this.stateL==true) { R=this.Rmin}
-
-                var CMain = draw.circle(R*2).fill(color).center(RH_Parameters.xCenter,RH_Parameters.yCenter);
-
-                CMain.click(function() { if(this.width()==Rmax*2){this.animate().size(Rmin*2)} else {this.animate().size(Rmax*2)} })
-            
-            //Image
-                var Im=[];
-                for (var i = 0; i < this.ListImg.length; i++) {
-
-                     var link = draw.link("https://"+Listlink[i]+".renaud-henry.me");
-                    link.show(Listlink[i]);
-                    link.target('_blank');
-                    Im.push(link.image(ListImg[i]).size(Rext*Math.sqrt(2),Rext*Math.sqrt(2)).center(RH_Parameters.xCenter+Math.sin(PasInt*i)*Rint,RH_Parameters.yCenter+Math.cos(PasInt*i)*Rint))
-                    
-                   
-                }
-
-            if(this.stateM==true)
+       
+       class RH_groups {
+            constructor(ListImg,Listlink,NbGroups,NoGroups,Rmain,Rmax,stateM,stateL,color)
             {
-                CMain.center(CenterX,CenterY);
-                    
-                for (var i = 0; i < this.ListImg.length; i++) {
-                    Ar[i].center(CenterX+Math.sin(PasInt*i)*Rint,CenterY+Math.cos(PasInt*i)*Rint);
-                    Im[i].center(CenterX+Math.sin(PasInt*i)*Rint,CenterY+Math.cos(PasInt*i)*Rint);
-                }
+                this.ListImg=ListImg;
+                this.Listlink=Listlink;
+                this.NbGroups=NbGroups;
+                this.NoGroups=NoGroups;
+                this.Rmain=Rmain;
+                this.Rmax=Rmax;
+                this.stateM=stateM;
+                this.stateL=stateL;
+                this.color=color;
+                this.Rmin = Rmax/4;
+                this.Rext = this.Rmin*1.5;
+                this.Rint= this.Rmax-(this.Rext);
             }
-            else
-            {
-                 CMain.animate().center(CenterX,CenterY);
-                for (var i = 0; i < this.ListImg.length; i++) {
-                    Ar[i].animate().center(CenterX+Math.sin(PasInt*i)*Rint,CenterY+Math.cos(PasInt*i)*Rint);
-                    Im[i].animate().center(CenterX+Math.sin(PasInt*i)*Rint,CenterY+Math.cos(PasInt*i)*Rint);
+        
+             get groups() {
+                return this.group;
+             }
+        
+            groups_compute(Pathx) {
+                var PasMain=(2*Math.PI)/this.NbGroups;
+                var PasInt=(2*Math.PI)/this.ListImg.length;
+
+                var group = draw.group()
+
+                var xCenter= this.Rmax;
+                var yCenter= this.Rmax;
+
+
+                var CenterX = RH_Parameters.xCenter + Math.sin(PasMain*this.NoGroups)*this.Rmain;
+                var CenterY = RH_Parameters.yCenter + Math.cos(PasMain*this.NoGroups)*this.Rmain;
+
+                //Parameter 
+                var Rmax = this.Rmax;
+                var Rmin = this.Rmin;
+
+                var color = this.color;
+
+                var Rext = this.Rext;
+                var Rint = this.Rint;
+
+                var ListImg = this.ListImg;
+                var Listlink = this.Listlink;
+                //alert(Listlink + " == " +this.Listlink )
+                //Cchildren
+                    var Ar=[];
+                    for (var i = 0; i < this.ListImg.length; i++) {
+                        Ar.push( draw.circle(Rext*2).fill(color).center(xCenter+Math.sin(PasInt*i)*Rint,yCenter+Math.cos(PasInt*i)*Rint)) 
+                    }
+
+                //C main
+                    var R=this.Rmax;
+                    if (this.stateL==true) { R=this.Rmin}
+
+                    var CMain = draw.circle(R*2).fill(color).center(xCenter,yCenter);
+
+                    CMain.click(function() { if(this.width()==Rmax*2){this.animate().size(Rmin*2)} else {this.animate().size(Rmax*2)} })
+
+                //Image
+                    var Im=[];
+                    for (var i = 0; i < this.ListImg.length; i++) {
+
+                    /*    var link = draw.link("https://"+Listlink[i]+".renaud-henry.me");
+                        link.show(Listlink[i]);
+                        link.target('_blank');*/
+                       var Name=Listlink[i]; Im.push(draw.image(ListImg[i]).size(Rext*Math.sqrt(2),Rext*Math.sqrt(2)).center(xCenter+Math.sin(PasInt*i)*Rint,yCenter+Math.cos(PasInt*i)*Rint).click(function() { window.open("https://"+Name+".renaud-henry.me", '_blank')} ))
+
+
+                    }
+                    group.add(CMain);
+                    for (var i = 0; i < this.ListImg.length; i++) {
+                        group.add(Ar[i]);
+                        group.add(Im[i]);
+                    }
+                if(this.stateM==true)
+                {
+                    group.center(CenterX,CenterY);
                 }
+                else
+                {
+                    group.animate(3000).center(CenterX,CenterY);
+                }
+
+
+                return group;
             }
-            
-            group.add(CMain);
-                for (var i = 0; i < this.ListImg.length; i++) {
-                    group.add(Ar[i]);
-                    group.add(Im[i]);
-                }
-            return group;
-        }
        }
     
-	function toto () {
+	   function toto () {
         RH_Parameters = new RH_GetParameter();
         var TabC=Cookies.get('TabC');
         if(TabC==undefined)
@@ -162,22 +215,28 @@
         var yCenter = RH_Parameters.yCenter;
         var Rmax=200/2;
         var Rmain = Math.min(xCenter-Rmax-20, yCenter-Rmax-20)
+        
+        var Path1 = tracePath(3,0,Rmain,Rmax,'#000')
+        var Path2 = tracePath(3,1,Rmain,Rmax,'#000')
+        var Path3 = tracePath(3,2,Rmain,Rmax,'#000')
+        
+        
         var ar1 = ['images/resume.svg','images/linkedin.svg','images/viadeo.svg'];
         var ar10 = ['cvpro','linkedin','viadeo'];
         
         var C1 = new RH_groups(ar1,ar10,3,0,Rmain,Rmax,TabC[0],TabC[1],'#F80');
-        var G1 = C1.groups_compute();
-        
+        var G1 = C1.groups_compute(Path1);
+        //G1.animate(5000).move(function(){this.})
         var ar2 = ['images/visite-virtuelle-interactive.svg','images/visite-virtuelle-photographie.svg','images/pano.svg','images/fractale-logo.png'];
         var ar20 = ['visite','photo','pano','fractale'];
         
         var C2 = new RH_groups(ar2,ar20,3,1,Rmain,Rmax,TabC[0],TabC[2],'#F08');
-        var G2 = C2.groups_compute();
+        var G2 = C2.groups_compute(Path2);
         
         var ar3 = ['images/fractale-logo.png','images/mandelbrot-logo.png','images/py-logo_low.png','images/knock-logo_low.png','images/Q_low.png'];
          var ar30 = ['julia','mandelbrot','pythagore','koch','quaternion'];
         var C3 = new RH_groups(ar3,ar30,3,2,Rmain,Rmax,TabC[0],TabC[3],'#0F8');
-        var G3 = C3.groups_compute();  
+        var G3 = C3.groups_compute(Path3);
         
         
        draw.rect(Rmax*2, Rmax*2).center(RH_Parameters.xCenter,RH_Parameters.yCenter).fill('#000').radius(25);
@@ -186,12 +245,65 @@
        draw.text("Renaud HENRY").fill('#fff').center(RH_Parameters.xCenter,RH_Parameters.yCenter+30);
        draw.text("Developpeur").fill('#fff').center(RH_Parameters.xCenter,RH_Parameters.yCenter+50);
        draw.text("33 ans").fill('#fff').center(RH_Parameters.xCenter,RH_Parameters.yCenter+70);
+        
+        
+            G1.animate(8000, '<>').during(function(pos, morph, eased){
+                    var length = Path1.length();
+                    var p = Path1.pointAt(eased *length );
+                    G1.center(p.x, p.y);
+            }).loop();
+
+        
+            G2.animate(8000, '<>').during(function(pos, morph, eased){
+                    var length = Path2.length();
+                    var p = Path2.pointAt(eased *length );
+                    G2.center(p.x, p.y);
+            }).loop();
+
+           
+            G3.animate(8000, '<>').during(function(pos, morph, eased){
+                    var length = Path3.length();
+                    var p = Path3.pointAt(eased *length );
+                    G3.center(p.x, p.y);
+            }).loop();
+           
+            G1.mouseover(function() { 
+                G1.pause();
+                G2.pause();
+                G3.pause();
+             })
+            G2.mouseover(function() { 
+                G1.pause();
+                G2.pause();
+                G3.pause();
+             })
+            G3.mouseover(function() { 
+                G1.pause();
+                G2.pause();
+                G3.pause();
+             })
+            G1.mouseout(function() { 
+                G1.play();
+                G2.play();
+                G3.play();
+             })
+            G2.mouseout(function() { 
+                G1.play();
+                G2.play();
+                G3.play();
+             })
+            G3.mouseout(function() { 
+                G1.play();
+                G2.play();
+                G3.play();
+             })
+        
        }
      
 		window.onload = toto;
 		window.onresize = toto;
 		
-	
+
         
        
   </script>
