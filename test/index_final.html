@@ -13,6 +13,7 @@
         var draw = SVG('drawing');
         var RH_Parameters = new RH_GetParameter(window,document);
        
+        var SiteWeb="renaud-henry.me";
         
 	   function toto () {
         RH_Parameters = new RH_GetParameter(window,document);
@@ -29,6 +30,7 @@
         var Rmax=200/2;
         var Rmain = Math.min(xCenter-Rmax-20, yCenter-Rmax-20)
         
+        
         var Path1 = new tracePath(3,0,Rmain,Rmax,'#888',0)
         var Path2 = new tracePath(3,1,Rmain,Rmax,'#888',0)
         var Path3 = new tracePath(3,2,Rmain,Rmax,'#888',0)
@@ -37,23 +39,23 @@
         var ar1 = ['images/resume.svg','images/linkedin.svg','images/viadeo.svg'];
         var ar10 = ['cvpro','linkedin','viadeo'];
         
-        var C1 = new RH_groups(ar1,ar10,3,0,Rmain,Rmax,TabC[0],TabC[1],'#F80');
+        var C1 = new RH_groups(ar1,ar10,3,0,Rmain,Rmax,TabC[0],TabC[1],'#F80',SiteWeb);
         var G1 = C1.groups_compute();
         //G1.animate(5000).move(function(){this.})
         var ar2 = ['images/visite-virtuelle-interactive.svg','images/visite-virtuelle-photographie.svg','images/pano.svg','images/fractale-logo.png'];
         var ar20 = ['visite','photo','pano','fractale'];
         
-        var C2 = new RH_groups(ar2,ar20,3,1,Rmain,Rmax,TabC[0],TabC[2],'#F08');
+        var C2 = new RH_groups(ar2,ar20,3,1,Rmain,Rmax,TabC[0],TabC[2],'#F08',SiteWeb);
         var G2 = C2.groups_compute();
         
         var ar3 = ['images/fractale-logo.png','images/mandelbrot-logo.png','images/py-logo_low.png','images/knock-logo_low.png','images/Q_low.png'];
          var ar30 = ['julia','mandelbrot','pythagore','koch','quaternion'];
-        var C3 = new RH_groups(ar3,ar30,3,2,Rmain,Rmax,TabC[0],TabC[3],'#0F8');
+        var C3 = new RH_groups(ar3,ar30,3,2,Rmain,Rmax,TabC[0],TabC[3],'#0F8',SiteWeb);
         var G3 = C3.groups_compute();
         
          var It1 = ['images/octocat.png','images/productivite-logo.png','images/wikipedia-logo.png'];
          var It2 = ['github','cvpro','wiki'];
-        var IterfaceImf= new RH_Interface(It1,It2,Rmain,Rmax,TabC[0]);
+        var IterfaceImf= new RH_Interface(It1,It2,Rmain,Rmax,TabC[0],SiteWeb);
         TabIterF=IterfaceImf.compute()
            
            

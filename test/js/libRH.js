@@ -78,25 +78,29 @@
        
        
         class RH_Interface {
-            constructor(ListImg,Listlink,Rmain,Rmax,stateM) {
+            constructor(ListImg,Listlink,Rmain,Rmax,stateM,Siteweb) {
                 this.ListImg=ListImg;
                 this.Listlink=Listlink;
                 this.Rmain=Rmain;
                 this.Rmax=Rmax;
                 this.stateM=stateM;
+                this.Siteweb=Siteweb;
             }
             compute(){
                 var PasMain=(2*Math.PI)/this.ListImg.length;
                 var NbPas = this.ListImg.length;
                 var xCenter= this.Rmain;
                 var yCenter= this.Rmain;
-
+                var Siteweb = this.Siteweb;
                 var Im=[];
                 var sizeImag=this.Rmax*Math.sqrt(2);
+                var Name="";
                 for(var i=0;i<NbPas;i++){
                     var PosX=RH_Parameters.x-sizeImag;
                     var PosY=0;
-                    var Name=this.Listlink[i]; Im.push(draw.image(this.ListImg[i]).size(sizeImag,sizeImag).move(PosX,PosY).click(function() { window.open("https://"+Name+".renaud-henry.me", '_blank')} ))
+                    Name=this.Listlink[i]; Im.push(draw.image(this.ListImg[i]).size(sizeImag,sizeImag).move(PosX,PosY));
+                    Im[Im.length-1]["Im"]= this.Listlink[i];
+                    Im[Im.length-1].click(function() { window.open("https://"+this.Im+"."+Siteweb, '_blank')} )
                 }
                 
                 
@@ -122,7 +126,7 @@
         }
   
        class RH_groups {
-            constructor(ListImg,Listlink,NbGroups,NoGroups,Rmain,Rmax,stateM,stateL,color)
+            constructor(ListImg,Listlink,NbGroups,NoGroups,Rmain,Rmax,stateM,stateL,color,Siteweb)
             {
                 this.ListImg=ListImg;
                 this.Listlink=Listlink;
@@ -136,6 +140,7 @@
                 this.Rmin = Rmax/4;
                 this.Rext = this.Rmin*1.5;
                 this.Rint= this.Rmax-(this.Rext);
+                this.Siteweb=Siteweb;
             }
         
              get groups() {
@@ -143,6 +148,8 @@
              }
         
             groups_compute() {
+                var Siteweb = this.Siteweb;
+                
                 var PasMain=(2*Math.PI)/this.NbGroups;
                 var PasInt=(2*Math.PI)/this.ListImg.length;
 
@@ -184,11 +191,9 @@
                 //Image
                     var Im=[];
                     for (var i = 0; i < this.ListImg.length; i++) {
-
-                    /*    var link = draw.link("https://"+Listlink[i]+".renaud-henry.me");
-                        link.show(Listlink[i]);
-                        link.target('_blank');*/
-                       var Name=Listlink[i]; Im.push(draw.image(ListImg[i]).size(Rext*Math.sqrt(2),Rext*Math.sqrt(2)).center(xCenter+Math.sin(PasInt*i)*Rint,yCenter+Math.cos(PasInt*i)*Rint).click(function() { window.open("https://"+Name+".renaud-henry.me", '_blank')} ))
+                        Im.push(draw.image(ListImg[i]).size(Rext*Math.sqrt(2),Rext*Math.sqrt(2)).center(xCenter+Math.sin(PasInt*i)*Rint,yCenter+Math.cos(PasInt*i)*Rint))
+                        Im[Im.length-1]["Im"]= Listlink[i];
+                        Im[Im.length-1].click(function() { window.open("https://"+this.Im+"."+Siteweb, '_blank')} )
 
 
                     }
